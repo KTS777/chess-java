@@ -1,4 +1,11 @@
+package controller;
 
+import model.Piece;
+import model.Square;
+import model.pieces.Bishop;
+import model.pieces.King;
+import model.pieces.Queen;
+import view.Board;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,16 +33,16 @@ public class CheckmateDetector {
     private HashMap<Square,List<Piece>> bMoves;
     
     /**
-     * Constructs a new instance of CheckmateDetector on a given board. By
+     * Constructs a new instance of controller.CheckmateDetector on a given board. By
      * convention should be called when the board is in its initial state.
      * 
      * @param b The board which the detector monitors
      * @param wPieces White pieces on the board.
      * @param bPieces Black pieces on the board.
-     * @param wk Piece object representing the white king
-     * @param bk Piece object representing the black king
+     * @param wk model.Piece object representing the white king
+     * @param bk model.Piece object representing the black king
      */
-    public CheckmateDetector(Board b, LinkedList<Piece> wPieces, 
+    public CheckmateDetector(Board b, LinkedList<Piece> wPieces,
             LinkedList<Piece> bPieces, King wk, King bk) {
         this.b = b;
         this.wPieces = wPieces;
@@ -428,8 +435,8 @@ public class CheckmateDetector {
     /**
      * Tests a move a player is about to make to prevent making an illegal move
      * that puts the player in check.
-     * @param p Piece moved
-     * @param sq Square to which p is about to move
+     * @param p model.Piece moved
+     * @param sq model.Square to which p is about to move
      * @return false if move would cause a check
      */
     public boolean testMove(Piece p, Square sq) {
@@ -438,13 +445,13 @@ public class CheckmateDetector {
         boolean movetest = true;
         Square init = p.getPosition();
         
-        p.move(sq);
+        p.move(sq, b);
         update();
         
         if (p.getColor() == 0 && blackInCheck()) movetest = false;
         else if (p.getColor() == 1 && whiteInCheck()) movetest = false;
         
-        p.move(init);
+        p.move(init, b);
         if (c != null) sq.put(c);
         
         update();

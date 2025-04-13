@@ -1,4 +1,8 @@
+package model.pieces;
 
+import model.Piece;
+import model.Square;
+import view.Board;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -11,8 +15,8 @@ public class Pawn extends Piece {
     }
     
     @Override
-    public boolean move(Square fin) {
-        boolean b = super.move(fin);
+    public boolean move(Square fin, Board board) {
+        boolean b = super.move(fin, board);
         wasMoved = true;
         return b;
     }

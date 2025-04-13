@@ -1,13 +1,15 @@
+package view;
 
+import controller.CheckmateDetector;
+import controller.GameController;
+import model.Piece;
+import model.PieceFactory;
+import model.Square;
+import model.pieces.King;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -124,11 +126,11 @@ public class Board extends JPanel {
     }
 
     public List<Piece> getWhitePieces() {
-        return List.copyOf(Wpieces);
+        return Wpieces;
     }
 
     public List<Piece> getBlackPieces() {
-        return List.copyOf(Bpieces);
+        return Bpieces;
     }
 
 

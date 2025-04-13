@@ -1,3 +1,8 @@
+package view;
+
+import model.Piece;
+import model.Square;
+
 import java.awt.Graphics;
 import java.awt.Image;
 

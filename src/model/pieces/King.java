@@ -1,4 +1,8 @@
+package model.pieces;
 
+import model.Piece;
+import model.Square;
+import view.Board;
 
 import java.util.LinkedList;
 import java.util.List;

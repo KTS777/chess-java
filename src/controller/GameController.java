@@ -1,3 +1,9 @@
+package controller;
+
+import model.Piece;
+import model.Square;
+import view.Board;
+
 import java.util.List;
 
 public class GameController {
@@ -74,7 +80,7 @@ public class GameController {
 
     private void applyMove(Square targetSquare) {
         targetSquare.setDisplay(true);
-        currPiece.move(targetSquare);
+        currPiece.move(targetSquare, board);
         checkmateDetector.update();
 
         if (checkmateDetector.blackCheckMated()) {

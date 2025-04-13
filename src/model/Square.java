@@ -1,4 +1,6 @@
+package model;
 
+import view.Board;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,11 +29,7 @@ public class Square extends JComponent {
         
         this.setBorder(BorderFactory.createEmptyBorder());
     }
-    
-    public int getColor() {
-        return this.color;
-    }
-    
+
     public Piece getOccupyingPiece() {
         return occupyingPiece;
     }
@@ -62,14 +60,20 @@ public class Square extends JComponent {
         this.occupyingPiece = null;
         return p;
     }
-    
-    public void capture(Piece p) {
+
+    public void capture(Piece p, Board b) {
         Piece k = getOccupyingPiece();
-        if (k.getColor() == 0) b.getBlackPieces().remove(k);
-        if (k.getColor() == 1) b.getWhitePieces().remove(k);
+
+        if (k.getColor() == 0) {
+            b.getBlackPieces().remove(k);
+        } else {
+            b.getWhitePieces().remove(k);
+        }
+
         this.occupyingPiece = p;
     }
-    
+
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
