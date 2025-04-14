@@ -207,7 +207,7 @@ public class CheckmateDetector {
             capture = true;
         }
 
-        for (Piece ally : allies.getOrDefault(threatSquare, List.of())) {
+        for (Piece ally : new LinkedList<>(allies.getOrDefault(threatSquare, List.of()))) {
             if (testMove(ally, threatSquare)) {
                 movableSquares.add(threatSquare);
                 capture = true;
@@ -282,7 +282,7 @@ public class CheckmateDetector {
 
     private boolean tryBlockSquare(Square square, Map<Square, List<Piece>> allies) {
         boolean blockPossible = false;
-        for (Piece ally : allies.getOrDefault(square, List.of())) {
+        for (Piece ally : new LinkedList<>(allies.getOrDefault(square, List.of()))) {
             if (testMove(ally, square)) {
                 movableSquares.add(square);
                 blockPossible = true;
