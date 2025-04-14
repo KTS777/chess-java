@@ -20,13 +20,13 @@ public class Board extends JPanel {
 
 	// Logical and graphical representations of board
 	private final Square[][] board;
-    private final GameWindow g;
-    
+    private final GameWindow gameWindow;
+
+    private static final int BOARD_SIZE = 8;
+
     // List of pieces and whether they are movable
-    private final LinkedList<Piece> Bpieces;
-    private final LinkedList<Piece> Wpieces;
-    public List<Square> movable;
-    
+    private final LinkedList<Piece> blackPieces;
+    private final LinkedList<Piece> whitePieces;
 
     private int dragX;
     private int dragY;
@@ -36,11 +36,11 @@ public class Board extends JPanel {
     private final BoardRenderer renderer = new BoardRenderer();
 
 
-    public Board(GameWindow g) {
-        this.g = g;
-        board = new Square[8][8];
-        Bpieces = new LinkedList<Piece>();
-        Wpieces = new LinkedList<Piece>();
+    public Board(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
+        board = new Square[BOARD_SIZE][BOARD_SIZE];
+        blackPieces = new LinkedList<>();
+        whitePieces = new LinkedList<>();
 
         setLayout(new GridLayout(8, 8, 0, 0));
         registerInputListeners();
@@ -65,7 +65,7 @@ public class Board extends JPanel {
     }
 
     private void initializeBoardSquares() {
-        for (int x = 0; x < 8; x++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
             for (int y = 0; y < 8; y++) {
                 int xMod = x % 2;
                 int yMod = y % 2;
@@ -83,9 +83,9 @@ public class Board extends JPanel {
 
     private void initializePieces() {
 
-        King[] kings = PieceFactory.createStandardSetup(board, Wpieces, Bpieces);
+        King[] kings = PieceFactory.createStandardSetup(board, whitePieces, blackPieces);
 
-        CheckmateDetector cmd = new CheckmateDetector(this, Wpieces, Bpieces, kings[0], kings[1]);
+        CheckmateDetector cmd = new CheckmateDetector(this, whitePieces, blackPieces, kings[0], kings[1]);
         gameController = new GameController(cmd, this);
 
     }
@@ -111,7 +111,7 @@ public class Board extends JPanel {
     }
 
     public GameWindow getGameWindow() {
-        return g;
+        return gameWindow;
     }
 
     public void setDragCoordinates(int x, int y) {
@@ -126,11 +126,11 @@ public class Board extends JPanel {
     }
 
     public List<Piece> getWhitePieces() {
-        return Wpieces;
+        return whitePieces;
     }
 
     public List<Piece> getBlackPieces() {
-        return Bpieces;
+        return blackPieces;
     }
 
 
