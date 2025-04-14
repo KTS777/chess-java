@@ -51,7 +51,7 @@ public class PieceFactory {
     }
 
     private static <T extends Piece> T placePiece(T piece, Square square, List<Piece> collection) {
-        square.put(piece);
+        square.setOccupyingPiece(piece);
         collection.add(piece);
         return piece;
     }

@@ -33,22 +33,6 @@ public abstract class Piece {
         }
     }
 
-
-    public boolean move(Square fin, Board board) {
-        Piece occup = fin.getOccupyingPiece();
-
-        if (occup != null) {
-            if (occup.getColor() == this.color) return false;
-            else fin.capture(this, board); // pass board
-        }
-
-        currentSquare.removePiece();
-        this.currentSquare = fin;
-        currentSquare.put(this);
-        return true;
-    }
-
-
     public Square getPosition() {
         return currentSquare;
     }

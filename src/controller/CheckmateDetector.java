@@ -31,6 +31,7 @@ public class CheckmateDetector {
     private final List<Square> allSquares;
     private final Map<Square, List<Piece>> whiteThreatMap;
     private final Map<Square, List<Piece>> blackThreatMap;
+    private final MoveService moveService = new MoveService();
 
 
     /**
@@ -113,8 +114,7 @@ public class CheckmateDetector {
     public boolean testMove(Piece piece, Square targetSquare) {
         Square originalSquare = piece.getPosition();
         Piece capturedPiece = targetSquare.getOccupyingPiece();
-
-        piece.move(targetSquare, board);
+        moveService.applyMove(piece, targetSquare, board);
         update();
 
         boolean isSafeMove = true;
@@ -125,9 +125,10 @@ public class CheckmateDetector {
         }
 
         // revert move
-        piece.move(originalSquare, board);
+        moveService.applyMove(piece, originalSquare, board);
         if (capturedPiece != null) {
-            targetSquare.put(capturedPiece);
+            targetSquare.setOccupyingPiece(capturedPiece);
+
         }
 
         update();

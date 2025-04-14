@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-@SuppressWarnings("serial")
+
 public class Board extends JPanel {
 
 	// Logical and graphical representations of board
@@ -71,10 +71,10 @@ public class Board extends JPanel {
                 int yMod = y % 2;
 
                 if ((xMod == 0 && yMod == 0) || (xMod == 1 && yMod == 1)) {
-                    board[x][y] = new Square(this, 1, y, x);
+                    board[x][y] = new Square(1, y, x);
                     this.add(board[x][y]);
                 } else {
-                    board[x][y] = new Square(this, 0, y, x);
+                    board[x][y] = new Square( 0, y, x);
                     this.add(board[x][y]);
                 }
             }

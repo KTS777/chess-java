@@ -9,36 +9,40 @@ import java.util.List;
 
 public class King extends Piece {
 
-    public King(int color, Square initSq, String img_file) {
-        super(color, initSq, img_file);
+    private static final int[][] KING_MOVES = {
+            {-1, -1}, {-1, 0}, {-1, 1},
+            { 0, -1},          { 0, 1},
+            { 1, -1}, { 1, 0}, { 1, 1}
+    };
+
+    public King(int color, Square initSq, String imgFile) {
+        super(color, initSq, imgFile);
     }
 
     @Override
-    public List<Square> getLegalMoves(Board b) {
-LinkedList<Square> legalMoves = new LinkedList<Square>();
-        
-        Square[][] board = b.getSquareArray();
-        
-        int x = this.getPosition().getXNum();
-        int y = this.getPosition().getYNum();
-        
-        for (int i = 1; i > -2; i--) {
-            for (int k = 1; k > -2; k--) {
-                if(!(i == 0 && k == 0)) {
-                    try {
-                        if(!board[y + k][x + i].isOccupied() || 
-                                board[y + k][x + i].getOccupyingPiece().getColor() 
-                                != this.getColor()) {
-                            legalMoves.add(board[y + k][x + i]);
-                        }
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        continue;
-                    }
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> legalMoves = new LinkedList<>();
+        Square[][] squares = board.getSquareArray();
+
+        int x = getPosition().getXNum();
+        int y = getPosition().getYNum();
+
+        for (int[] move : KING_MOVES) {
+            int newX = x + move[0];
+            int newY = y + move[1];
+
+            if (isInBounds(newX, newY)) {
+                Square target = squares[newY][newX];
+                if (!target.isOccupied() || target.getOccupyingPiece().getColor() != getColor()) {
+                    legalMoves.add(target);
                 }
             }
         }
-        
+
         return legalMoves;
     }
 
+    private boolean isInBounds(int x, int y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
 }

@@ -9,33 +9,36 @@ import java.util.List;
 
 public class Knight extends Piece {
 
-    public Knight(int color, Square initSq, String img_file) {
-        super(color, initSq, img_file);
+    private static final int[][] KNIGHT_MOVES = {
+            {2, 1}, {1, 2}, {-1, 2}, {-2, 1},
+            {-2, -1}, {-1, -2}, {1, -2}, {2, -1}
+    };
+
+    public Knight(int color, Square initSq, String imgFile) {
+        super(color, initSq, imgFile);
     }
 
     @Override
-    public List<Square> getLegalMoves(Board b) {
-        LinkedList<Square> legalMoves = new LinkedList<Square>();
-        Square[][] board = b.getSquareArray();
-        
-        int x = this.getPosition().getXNum();
-        int y = this.getPosition().getYNum();
-        
-        for (int i = 2; i > -3; i--) {
-            for (int k = 2; k > -3; k--) {
-                if(Math.abs(i) == 2 ^ Math.abs(k) == 2) {
-                    if (k != 0 && i != 0) {
-                        try {
-                            legalMoves.add(board[y + k][x + i]);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            continue;
-                        }
-                    }
-                }
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> legalMoves = new LinkedList<>();
+        Square[][] squares = board.getSquareArray();
+
+        int x = getPosition().getXNum();
+        int y = getPosition().getYNum();
+
+        for (int[] move : KNIGHT_MOVES) {
+            int newX = x + move[0];
+            int newY = y + move[1];
+
+            if (isInBounds(newX, newY)) {
+                legalMoves.add(squares[newY][newX]);
             }
         }
-        
+
         return legalMoves;
     }
 
+    private boolean isInBounds(int x, int y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
 }

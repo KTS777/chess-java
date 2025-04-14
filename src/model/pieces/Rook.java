@@ -9,29 +9,34 @@ import java.util.List;
 
 public class Rook extends Piece {
 
-    public Rook(int color, Square initSq, String img_file) {
-        super(color, initSq, img_file);
+    public Rook(int color, Square initSq, String imgFile) {
+        super(color, initSq, imgFile);
     }
 
     @Override
-    public List<Square> getLegalMoves(Board b) {
-        LinkedList<Square> legalMoves = new LinkedList<Square>();
-        Square[][] board = b.getSquareArray();
-        
-        int x = this.getPosition().getXNum();
-        int y = this.getPosition().getYNum();
-        
-        int[] occups = getLinearOccupations(board, x, y);
-        
-        for (int i = occups[0]; i <= occups[1]; i++) {
-            if (i != y) legalMoves.add(board[i][x]);
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> legalMoves = new LinkedList<>();
+        Square[][] squares = board.getSquareArray();
+
+        int x = getPosition().getXNum();
+        int y = getPosition().getYNum();
+
+        int[] linearLimits = getLinearOccupations(squares, x, y);
+        int top = linearLimits[0];
+        int bottom = linearLimits[1];
+        int left = linearLimits[2];
+        int right = linearLimits[3];
+
+        // Vertical moves
+        for (int i = top; i <= bottom; i++) {
+            if (i != y) legalMoves.add(squares[i][x]);
         }
-        
-        for (int i = occups[2]; i <= occups[3]; i++) {
-            if (i != x) legalMoves.add(board[y][i]);
+
+        // Horizontal moves
+        for (int i = left; i <= right; i++) {
+            if (i != x) legalMoves.add(squares[y][i]);
         }
-        
+
         return legalMoves;
     }
-
 }

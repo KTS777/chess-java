@@ -13,7 +13,7 @@ public class GameController {
     private boolean gameOver = false;
     private int winningColor = -1;
     private final Board board;
-
+    private final MoveService moveService = new MoveService();
 
 
     public GameController(CheckmateDetector checkmateDetector, Board board) {
@@ -80,7 +80,7 @@ public class GameController {
 
     private void applyMove(Square targetSquare) {
         targetSquare.setDisplay(true);
-        currPiece.move(targetSquare, board);
+        moveService.applyMove(currPiece, targetSquare, board);
         checkmateDetector.update();
 
         if (checkmateDetector.blackCheckMated()) {

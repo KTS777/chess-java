@@ -13,76 +13,55 @@ public class Pawn extends Piece {
     public Pawn(int color, Square initSq, String img_file) {
         super(color, initSq, img_file);
     }
-    
-    @Override
-    public boolean move(Square fin, Board board) {
-        boolean b = super.move(fin, board);
-        wasMoved = true;
-        return b;
+
+    public boolean wasMoved() {
+        return wasMoved;
     }
+
+    public void setWasMoved(boolean moved) {
+        this.wasMoved = moved;
+    }
+
 
     @Override
     public List<Square> getLegalMoves(Board b) {
-        LinkedList<Square> legalMoves = new LinkedList<Square>();
-        
+        LinkedList<Square> legalMoves = new LinkedList<>();
         Square[][] board = b.getSquareArray();
-        
-        int x = this.getPosition().getXNum();
-        int y = this.getPosition().getYNum();
-        int c = this.getColor();
-        
-        if (c == 0) {
-            if (!wasMoved) {
-                if (!board[y+2][x].isOccupied()) {
-                    legalMoves.add(board[y+2][x]);
-                }
-            }
-            
-            if (y+1 < 8) {
-                if (!board[y+1][x].isOccupied()) {
-                    legalMoves.add(board[y+1][x]);
-                }
-            }
-            
-            if (x+1 < 8 && y+1 < 8) {
-                if (board[y+1][x+1].isOccupied()) {
-                    legalMoves.add(board[y+1][x+1]);
-                }
-            }
-                
-            if (x-1 >= 0 && y+1 < 8) {
-                if (board[y+1][x-1].isOccupied()) {
-                    legalMoves.add(board[y+1][x-1]);
+
+        int x = getPosition().getXNum();
+        int y = getPosition().getYNum();
+        int dir = (getColor() == 0) ? 1 : -1; // Black = down, White = up
+
+        // Single move forward
+        if (isInBounds(y + dir) && !board[y + dir][x].isOccupied()) {
+            legalMoves.add(board[y + dir][x]);
+
+
+            if (!wasMoved()) {
+                int doubleStepY = y + 2 * dir;
+                if (isInBounds(doubleStepY) && !board[doubleStepY][x].isOccupied()) {
+                    legalMoves.add(board[doubleStepY][x]);
                 }
             }
         }
-        
-        if (c == 1) {
-            if (!wasMoved) {
-                if (!board[y-2][x].isOccupied()) {
-                    legalMoves.add(board[y-2][x]);
-                }
-            }
-            
-            if (y-1 >= 0) {
-                if (!board[y-1][x].isOccupied()) {
-                    legalMoves.add(board[y-1][x]);
-                }
-            }
-            
-            if (x+1 < 8 && y-1 >= 0) {
-                if (board[y-1][x+1].isOccupied()) {
-                    legalMoves.add(board[y-1][x+1]);
-                }
-            }
-                
-            if (x-1 >= 0 && y-1 >= 0) {
-                if (board[y-1][x-1].isOccupied()) {
-                    legalMoves.add(board[y-1][x-1]);
-                }
+
+        // Diagonal captures
+        if (isInBounds(x + 1) && isInBounds(y + dir)) {
+            if (board[y + dir][x + 1].isOccupied()) {
+                legalMoves.add(board[y + dir][x + 1]);
             }
         }
-        
+        if (isInBounds(x - 1) && isInBounds(y + dir)) {
+            if (board[y + dir][x - 1].isOccupied()) {
+                legalMoves.add(board[y + dir][x - 1]);
+            }
+        }
+
         return legalMoves;
     }
+
+    private boolean isInBounds(int i) {
+        return i >= 0 && i < 8;
+    }
+
 }
