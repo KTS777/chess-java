@@ -6,13 +6,10 @@ import model.pieces.Bishop;
 import model.pieces.King;
 import model.pieces.Queen;
 import view.Board;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 
 /**
@@ -34,16 +31,6 @@ public class CheckmateDetector {
     private final MoveService moveService = new MoveService();
 
 
-    /**
-     * Constructs a new instance of controller.CheckmateDetector on a given board. By
-     * convention should be called when the board is in its initial state.
-     * 
-     * @param board The board which the detector monitors
-     * @param whitePieces White pieces on the board.
-     * @param blackPieces Black pieces on the board.
-     * @param whiteKing model.Piece object representing the white king
-     * @param blackKing model.Piece object representing the black king
-     */
     public CheckmateDetector(Board board,
                              LinkedList<Piece> whitePieces,
                              LinkedList<Piece> blackPieces,
@@ -107,10 +94,7 @@ public class CheckmateDetector {
         return movableSquares;
     }
 
-    /**
-     * Tests a move a player is about to make to prevent making an illegal move
-     * that puts the player in check.
-     */
+
     public boolean testMove(Piece piece, Square targetSquare) {
         Square originalSquare = piece.getPosition();
         Piece capturedPiece = targetSquare.getOccupyingPiece();
