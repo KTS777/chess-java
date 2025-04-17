@@ -18,13 +18,11 @@ import javax.swing.*;
 
 public class Board extends JPanel {
 
-	// Logical and graphical representations of board
 	private final Square[][] board;
     private final GameWindow gameWindow;
 
     private static final int BOARD_SIZE = 8;
 
-    // List of pieces and whether they are movable
     private final LinkedList<Piece> blackPieces;
     private final LinkedList<Piece> whitePieces;
 
@@ -34,6 +32,9 @@ public class Board extends JPanel {
     private GameController gameController;
 
     private final BoardRenderer renderer = new BoardRenderer();
+
+    private Square[][] squares;
+
 
 
     public Board(GameWindow gameWindow) {
@@ -49,6 +50,23 @@ public class Board extends JPanel {
         initializePieces();
         configureBoardSize();
     }
+
+    public Square getSquare(int x, int y) {
+        return squares[y][x];
+    }
+
+
+    public void setupEmptyBoard() {
+        squares = new Square[8][8];
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                int color = (x + y) % 2; // 0 or 1 for alternating colors
+                squares[y][x] = new Square(color,  x, y);
+            }
+        }
+    }
+
+
 
     private void registerInputListeners() {
         BoardMouseHandler handler = new BoardMouseHandler(this);
@@ -80,6 +98,7 @@ public class Board extends JPanel {
             }
         }
     }
+
 
     private void initializePieces() {
 

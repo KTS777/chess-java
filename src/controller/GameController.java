@@ -7,9 +7,11 @@ import view.Board;
 import java.util.List;
 
 public class GameController {
+    public static final int BLACK = 0;
+    public static final int WHITE = 1;
     private boolean whiteTurn;
     private Piece currPiece;
-    private CheckmateDetector checkmateDetector;
+    private final CheckmateDetector checkmateDetector;
     private boolean gameOver = false;
     private int winningColor = -1;
     private final Board board;
@@ -43,8 +45,8 @@ public class GameController {
     }
 
     public boolean isCorrectPlayerTurn(Piece piece) {
-        return (piece.getColor() == 1 && whiteTurn) ||
-                (piece.getColor() == 0 && !whiteTurn);
+        return (piece.getColor() == WHITE && whiteTurn) ||
+                (piece.getColor() == BLACK && !whiteTurn);
     }
 
     public void selectPiece(Square square) {
@@ -58,24 +60,21 @@ public class GameController {
     }
 
     public boolean handlePieceDrop(Square targetSquare) {
-        if (currPiece == null || !isCorrectPlayerTurn(currPiece)) {
-            return false;
-        }
-
-        List<Square> legalMoves = currPiece.getLegalMoves(board);
-        List<Square> movableSquares = checkmateDetector.getAllowableSquares(whiteTurn);
-
-        boolean validMove = legalMoves.contains(targetSquare)
-                && movableSquares.contains(targetSquare)
-                && checkmateDetector.testMove(currPiece, targetSquare);
-
-        if (validMove) {
+        if (isMoveValid(targetSquare)) {
             applyMove(targetSquare);
             return true;
         } else {
             cancelMove();
             return false;
         }
+    }
+
+    private boolean isMoveValid(Square targetSquare) {
+        return currPiece != null &&
+                isCorrectPlayerTurn(currPiece) &&
+                currPiece.getLegalMoves(board).contains(targetSquare) &&
+                checkmateDetector.getAllowableSquares(whiteTurn).contains(targetSquare) &&
+                checkmateDetector.testMove(currPiece, targetSquare);
     }
 
     private void applyMove(Square targetSquare) {

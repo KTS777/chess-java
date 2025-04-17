@@ -3,7 +3,6 @@ package model;
 import javax.swing.*;
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class Square extends JComponent {
     private final int color;
     private final int xNum;
@@ -64,8 +63,16 @@ public class Square extends JComponent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Square)) return false;
+        Square other = (Square) o;
+        return this.getXNum() == other.getXNum() &&
+                this.getYNum() == other.getYNum();
+    }
+
+    @Override
     public int hashCode() {
-        int result = 31 * xNum + yNum;
-        return result;
+        return 31 * getXNum() + getYNum();
     }
 }
