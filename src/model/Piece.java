@@ -16,12 +16,21 @@ public abstract class Piece {
     private Square currentSquare;
     private BufferedImage img;
     private static final int BOARD_SIZE = 8;
+    protected boolean wasMoved = false;
 
 
     public Piece(int color, Square initSq, String imgPath) {
         this.color = color;
         this.currentSquare = initSq;
         this.img = loadImage(imgPath);
+    }
+
+    public boolean wasMoved() {
+        return wasMoved;
+    }
+
+    public void setWasMoved(boolean moved) {
+        this.wasMoved = moved;
     }
 
     private BufferedImage loadImage(String path) {

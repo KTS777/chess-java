@@ -21,25 +21,45 @@ public class Queen extends Piece {
         int x = getPosition().getXNum();
         int y = getPosition().getYNum();
 
-        int[] linearLimits = getLinearOccupations(squares, x, y);
-        int top = linearLimits[0];
-        int bottom = linearLimits[1];
-        int left = linearLimits[2];
-        int right = linearLimits[3];
+        // Directions: {dx, dy}
+        int[][] directions = {
+                {0, -1},  // up
+                {0, 1},   // down
+                {-1, 0},  // left
+                {1, 0},   // right
+                {-1, -1}, // top-left
+                {-1, 1},  // bottom-left
+                {1, -1},  // top-right
+                {1, 1}    // bottom-right
+        };
 
-        // Vertical moves
-        for (int i = top; i <= bottom; i++) {
-            if (i != y) legalMoves.add(squares[i][x]);
+        for (int[] dir : directions) {
+            int dx = dir[0];
+            int dy = dir[1];
+            int currX = x + dx;
+            int currY = y + dy;
+
+            while (isInBounds(currX) && isInBounds(currY)) {
+                Square target = squares[currY][currX];
+                if (!target.isOccupied()) {
+                    legalMoves.add(target);
+                } else {
+                    if (target.getOccupyingPiece().getColor() != getColor()) {
+                        legalMoves.add(target); // capture
+                    }
+                    break; // blocked
+                }
+
+                currX += dx;
+                currY += dy;
+            }
         }
-
-        // Horizontal moves
-        for (int i = left; i <= right; i++) {
-            if (i != x) legalMoves.add(squares[y][i]);
-        }
-
-        // Diagonal moves
-        legalMoves.addAll(getDiagonalOccupations(squares, x, y));
 
         return legalMoves;
     }
+
+    private boolean isInBounds(int i) {
+        return i >= 0 && i < 8;
+    }
+
 }
