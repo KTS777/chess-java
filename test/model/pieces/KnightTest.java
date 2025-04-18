@@ -13,73 +13,57 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KnightTest {
 
     private Board board;
+    private Knight knight;
 
     @BeforeEach
     public void setUp() {
-        board = new Board(null); // No GUI needed for tests
-        board.setupEmptyBoard(); // Your helper to create 8x8 board
+        board = new Board(null);
+        board.setupEmptyBoard();
+        knight = new Knight(1, board.getSquare(4, 4), "wn.png");
+        board.getSquare(4, 4).setOccupyingPiece(knight);
     }
 
     @Test
-    public void testKnightBasicMoves() {
-        Knight knight = new Knight(1, board.getSquare(4, 4), "wn.png");
-        board.getSquare(4, 4).setOccupyingPiece(knight);
-
+    public void testKnightMovesFromCenter() {
         List<Square> legalMoves = knight.getLegalMoves(board);
-
-        int[][] expectedOffsets = {
-                {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2},
-                {1, -2}, {1, 2}, {2, -1}, {2, 1}
+        int[][] expectedMoves = {
+                {2, 3}, {2, 5}, {3, 2}, {3, 6},
+                {5, 2}, {5, 6}, {6, 3}, {6, 5}
         };
-
-        for (int[] offset : expectedOffsets) {
-            int x = 4 + offset[0];
-            int y = 4 + offset[1];
-            if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                Square expected = board.getSquare(x, y);
-                assertTrue(legalMoves.contains(expected),
-                        "Missing move to (" + x + "," + y + ")");
-            }
+        for (int[] move : expectedMoves) {
+            assertTrue(legalMoves.contains(board.getSquare(move[0], move[1])),
+                    "Expected move: (" + move[0] + ", " + move[1] + ")");
         }
-
-        assertEquals(8, legalMoves.size(), "Knight should have 8 moves from center");
+        assertEquals(8, legalMoves.size());
     }
 
     @Test
     public void testKnightCanCaptureEnemy() {
-        Knight knight = new Knight(1, board.getSquare(3, 3), "wn.png");
-        board.getSquare(3, 3).setOccupyingPiece(knight);
-
-        Piece enemy = new Rook(0, board.getSquare(5, 4), "br.png");
-        board.getSquare(5, 4).setOccupyingPiece(enemy);
+        Piece enemy = new Rook(0, board.getSquare(2, 3), "br.png");
+        board.getSquare(2, 3).setOccupyingPiece(enemy);
 
         List<Square> legalMoves = knight.getLegalMoves(board);
-
-        assertTrue(legalMoves.contains(board.getSquare(5, 4)));
+        assertTrue(legalMoves.contains(board.getSquare(2, 3)));
     }
 
     @Test
-    public void testKnightBlockedByAlly() {
-        Knight knight = new Knight(1, board.getSquare(3, 3), "wn.png");
-        board.getSquare(3, 3).setOccupyingPiece(knight);
-
-        Piece ally = new Rook(1, board.getSquare(5, 4), "wr.png");
-        board.getSquare(5, 4).setOccupyingPiece(ally);
+    public void testKnightCannotCaptureFriendly() {
+        Piece friendly = new Rook(1, board.getSquare(2, 3), "wr.png");
+        board.getSquare(2, 3).setOccupyingPiece(friendly);
 
         List<Square> legalMoves = knight.getLegalMoves(board);
-
-        assertFalse(legalMoves.contains(board.getSquare(5, 4)));
+        assertFalse(legalMoves.contains(board.getSquare(2, 3)));
     }
 
     @Test
-    public void testKnightFromCorner() {
-        Knight knight = new Knight(1, board.getSquare(0, 0), "wn.png");
+    public void testKnightMovesFromCorner() {
+        knight.setPosition(board.getSquare(0, 0));
+        board.getSquare(4, 4).removePiece();
         board.getSquare(0, 0).setOccupyingPiece(knight);
 
         List<Square> legalMoves = knight.getLegalMoves(board);
-
-        assertTrue(legalMoves.contains(board.getSquare(1, 2))); // b3
-        assertTrue(legalMoves.contains(board.getSquare(2, 1))); // c2
-        assertEquals(2, legalMoves.size(), "Knight from a1 should have only 2 valid moves");
+        assertEquals(2, legalMoves.size());
+        assertTrue(legalMoves.contains(board.getSquare(1, 2)));
+        assertTrue(legalMoves.contains(board.getSquare(2, 1)));
     }
 }

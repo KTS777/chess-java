@@ -15,48 +15,24 @@ public class Queen extends Piece {
 
     @Override
     public List<Square> getLegalMoves(Board board) {
-        List<Square> legalMoves = new LinkedList<>();
         Square[][] squares = board.getSquareArray();
-
         int x = getPosition().getXNum();
         int y = getPosition().getYNum();
 
-        // Directions: {dx, dy}
-        int[][] directions = {
-                {0, -1},  // up
-                {0, 1},   // down
-                {-1, 0},  // left
-                {1, 0},   // right
-                {-1, -1}, // top-left
-                {-1, 1},  // bottom-left
-                {1, -1},  // top-right
-                {1, 1}    // bottom-right
-        };
+        List<Square> moves = new LinkedList<>();
+        int[] bounds = getLinearOccupations(squares, x, y);
 
-        for (int[] dir : directions) {
-            int dx = dir[0];
-            int dy = dir[1];
-            int currX = x + dx;
-            int currY = y + dy;
 
-            while (isInBounds(currX) && isInBounds(currY)) {
-                Square target = squares[currY][currX];
-                if (!target.isOccupied()) {
-                    legalMoves.add(target);
-                } else {
-                    if (target.getOccupyingPiece().getColor() != getColor()) {
-                        legalMoves.add(target);
-                    }
-                    break;
-                }
+        for (int i = bounds[0]; i < y; i++) moves.add(squares[i][x]);         // Up
+        for (int i = y + 1; i <= bounds[1]; i++) moves.add(squares[i][x]);    // Down
+        for (int i = bounds[2]; i < x; i++) moves.add(squares[y][i]);         // Left
+        for (int i = x + 1; i <= bounds[3]; i++) moves.add(squares[y][i]);    // Right
 
-                currX += dx;
-                currY += dy;
-            }
-        }
+        moves.addAll(getDiagonalOccupations(squares, x, y));
 
-        return legalMoves;
+        return moves;
     }
+
 
     private boolean isInBounds(int i) {
         return i >= 0 && i < 8;

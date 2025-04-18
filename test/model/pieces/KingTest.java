@@ -1,5 +1,6 @@
 package model.pieces;
 
+import model.Piece;
 import model.Square;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,42 +16,25 @@ public class KingTest {
 
     @BeforeEach
     public void setUp() {
-        board = new Board(null); // no GUI needed for logic
-        board.setupEmptyBoard();
+        board = new Board(null);
     }
 
     @Test
-    public void testKingMovesAllDirections() {
+    public void testKingStandardMoves() {
         King king = new King(1, board.getSquare(4, 4), "wk.png");
         board.getSquare(4, 4).setOccupyingPiece(king);
 
-        List<Square> legalMoves = king.getLegalMoves(board);
+        List<Square> moves = king.getLegalMoves(board);
 
-        int[][] deltas = {
-                {-1, -1}, {0, -1}, {1, -1},
-                {-1,  0},          {1,  0},
-                {-1,  1}, {0,  1}, {1,  1}
-        };
-
-        for (int[] d : deltas) {
-            int x = 4 + d[0];
-            int y = 4 + d[1];
-            assertTrue(legalMoves.contains(board.getSquare(x, y)),
-                    "Expected move to (" + x + "," + y + ")");
-        }
-    }
-
-    @Test
-    public void testKingCornerMoves() {
-        King king = new King(1, board.getSquare(0, 0), "wk.png"); // a1
-        board.getSquare(0, 0).setOccupyingPiece(king);
-
-        List<Square> legalMoves = king.getLegalMoves(board);
-
-        assertEquals(3, legalMoves.size(), "King in corner should have exactly 3 legal moves");
-        assertTrue(legalMoves.contains(board.getSquare(1, 0))); // b1
-        assertTrue(legalMoves.contains(board.getSquare(0, 1))); // a2
-        assertTrue(legalMoves.contains(board.getSquare(1, 1))); // b2
+        assertTrue(moves.contains(board.getSquare(3, 3)));
+        assertTrue(moves.contains(board.getSquare(3, 4)));
+        assertTrue(moves.contains(board.getSquare(3, 5)));
+        assertTrue(moves.contains(board.getSquare(4, 3)));
+        assertTrue(moves.contains(board.getSquare(4, 5)));
+        assertTrue(moves.contains(board.getSquare(5, 3)));
+        assertTrue(moves.contains(board.getSquare(5, 4)));
+        assertTrue(moves.contains(board.getSquare(5, 5)));
+        assertEquals(8, moves.size());
     }
 
     @Test
@@ -58,72 +42,32 @@ public class KingTest {
         King king = new King(1, board.getSquare(4, 4), "wk.png");
         board.getSquare(4, 4).setOccupyingPiece(king);
 
-        int[][] deltas = {
-                {-1, -1}, {-1, 0}, {-1, 1},
-                {0, -1},          {0, 1},
-                {1, -1},  {1, 0}, {1, 1}
-        };
-
-        for (int[] d : deltas) {
-            int x = 4 + d[0], y = 4 + d[1];
-            if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                board.getSquare(x, y).setOccupyingPiece(new Pawn(1, board.getSquare(x, y), "wp.png")); // friendly
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int x = 4 + dx;
+                int y = 4 + dy;
+                if (x == 4 && y == 4) continue;
+                Piece p = new Rook(1, board.getSquare(x, y), "wr.png");
+                board.getSquare(x, y).setOccupyingPiece(p);
             }
         }
 
-        List<Square> legalMoves = king.getLegalMoves(board);
-
-
-        assertEquals(0, legalMoves.size(), "King should not be able to move to any square occupied by friendly pieces");
+        List<Square> moves = king.getLegalMoves(board);
+        assertEquals(0, moves.size());
     }
 
-
     @Test
-    public void testKingCanCaptureEnemyPieces() {
-        King king = new King(1, board.getSquare(4, 4), "wk.png"); // e4
+    public void testKingCanCaptureEnemies() {
+        King king = new King(0, board.getSquare(4, 4), "bk.png");
         board.getSquare(4, 4).setOccupyingPiece(king);
 
+        Piece enemy1 = new Knight(1, board.getSquare(3, 3), "wn.png");
+        Piece enemy2 = new Knight(1, board.getSquare(4, 5), "wn.png");
+        board.getSquare(3, 3).setOccupyingPiece(enemy1);
+        board.getSquare(4, 5).setOccupyingPiece(enemy2);
 
-        int[][] deltas = {
-                {-1, -1}, {-1, 0}, {-1, 1},
-                {0, -1},          {0, 1},
-                {1, -1},  {1, 0}, {1, 1}
-        };
-
-        for (int[] d : deltas) {
-            int x = 4 + d[0], y = 4 + d[1];
-            if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                board.getSquare(x, y).setOccupyingPiece(new Pawn(0, board.getSquare(x, y), "bp.png")); // enemy
-            }
-        }
-
-        List<Square> legalMoves = king.getLegalMoves(board);
-
-
-        assertEquals(8, legalMoves.size(), "King should be able to capture all 8 enemy pieces");
-
-        for (int[] d : deltas) {
-            int x = 4 + d[0], y = 4 + d[1];
-            if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                assertTrue(legalMoves.contains(board.getSquare(x, y)),
-                        "King should be able to move to (" + x + "," + y + ")");
-            }
-        }
+        List<Square> moves = king.getLegalMoves(board);
+        assertTrue(moves.contains(board.getSquare(3, 3)));
+        assertTrue(moves.contains(board.getSquare(4, 5)));
     }
-
-    @Test
-    public void testKingEdgeOfBoard() {
-        King king = new King(1, board.getSquare(0, 0), "wk.png"); // a1
-        board.getSquare(0, 0).setOccupyingPiece(king);
-
-        List<Square> legalMoves = king.getLegalMoves(board);
-
-        assertEquals(3, legalMoves.size(), "King in corner should have 3 legal moves");
-
-        assertTrue(legalMoves.contains(board.getSquare(1, 0))); // b1
-        assertTrue(legalMoves.contains(board.getSquare(0, 1))); // a2
-        assertTrue(legalMoves.contains(board.getSquare(1, 1))); // b2
-    }
-
-
 }

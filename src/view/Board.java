@@ -15,10 +15,9 @@ import java.util.List;
 
 import javax.swing.*;
 
-
 public class Board extends JPanel {
 
-	private final Square[][] board;
+    private final Square[][] board;
     private final GameWindow gameWindow;
 
     private static final int BOARD_SIZE = 8;
@@ -32,10 +31,6 @@ public class Board extends JPanel {
     private GameController gameController;
 
     private final BoardRenderer renderer = new BoardRenderer();
-
-    private Square[][] squares;
-
-
 
     public Board(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -52,27 +47,23 @@ public class Board extends JPanel {
     }
 
     public Square getSquare(int x, int y) {
-        return squares[y][x];
+        return board[y][x];
     }
 
-
     public void setupEmptyBoard() {
-        squares = new Square[8][8];
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
                 int color = (x + y) % 2;
-                squares[y][x] = new Square(color,  x, y);
+                board[y][x] = new Square(color, x, y);
+                this.add(board[y][x]);
             }
         }
     }
-
-
 
     private void registerInputListeners() {
         BoardMouseHandler handler = new BoardMouseHandler(this);
         this.addMouseListener(handler);
         this.addMouseMotionListener(handler);
-
     }
 
     private void configureBoardSize() {
@@ -83,30 +74,19 @@ public class Board extends JPanel {
     }
 
     private void initializeBoardSquares() {
-        for (int x = 0; x < BOARD_SIZE; x++) {
-            for (int y = 0; y < 8; y++) {
-                int xMod = x % 2;
-                int yMod = y % 2;
-
-                if ((xMod == 0 && yMod == 0) || (xMod == 1 && yMod == 1)) {
-                    board[x][y] = new Square(1, y, x);
-                    this.add(board[x][y]);
-                } else {
-                    board[x][y] = new Square( 0, y, x);
-                    this.add(board[x][y]);
-                }
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                int color = (x + y) % 2;
+                board[y][x] = new Square(color, x, y);
+                this.add(board[y][x]);
             }
         }
     }
 
-
     private void initializePieces() {
-
         King[] kings = PieceFactory.createStandardSetup(board, whitePieces, blackPieces);
-
         CheckmateDetector cmd = new CheckmateDetector(this, whitePieces, blackPieces, kings[0], kings[1]);
         gameController = new GameController(cmd, this);
-
     }
 
     public Square[][] getSquareArray() {
@@ -138,7 +118,6 @@ public class Board extends JPanel {
         this.dragY = y;
     }
 
-
     @Override
     public void paintComponent(Graphics g) {
         renderer.render(g, board, gameController.getCurrentPiece(), gameController.isWhiteTurn(), dragX, dragY);
@@ -151,6 +130,4 @@ public class Board extends JPanel {
     public List<Piece> getBlackPieces() {
         return blackPieces;
     }
-
-
 }

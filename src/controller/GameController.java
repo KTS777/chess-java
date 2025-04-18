@@ -2,8 +2,8 @@ package controller;
 
 import model.Piece;
 import model.Square;
+import model.pieces.Pawn;
 import view.Board;
-
 
 public class GameController {
     public static final int BLACK = 0;
@@ -16,11 +16,16 @@ public class GameController {
     private final Board board;
     private final MoveService moveService = new MoveService();
 
+    private Square lastDoubleStepSquare;
+
+
 
     public GameController(CheckmateDetector checkmateDetector, Board board) {
         this.checkmateDetector = checkmateDetector;
         this.board = board;
+        this.whiteTurn = true;
     }
+
 
 
     public boolean isWhiteTurn() {
@@ -78,13 +83,32 @@ public class GameController {
 
     private void applyMove(Square targetSquare) {
         targetSquare.setDisplay(true);
+
+        if (currPiece instanceof Pawn pawn) {
+            int fromY = currPiece.getPosition().getYNum();
+            int toY = targetSquare.getYNum();
+            if (Math.abs(fromY - toY) == 2) {
+                lastDoubleStepSquare = targetSquare;
+            } else {
+                lastDoubleStepSquare = null;
+            }
+
+            if (targetSquare.getXNum() != currPiece.getPosition().getXNum() && !targetSquare.isOccupied()) {
+                int dir = (currPiece.getColor() == WHITE) ? -1 : 1;
+                Square captured = board.getSquare(targetSquare.getXNum(), targetSquare.getYNum() - dir);
+                captured.removePiece();
+            }
+        } else {
+            lastDoubleStepSquare = null;
+        }
+
         moveService.applyMove(currPiece, targetSquare, board);
         checkmateDetector.update();
 
         if (checkmateDetector.blackCheckMated()) {
-            finishGame(0);
+            finishGame(WHITE);
         } else if (checkmateDetector.whiteCheckMated()) {
-            finishGame(1);
+            finishGame(BLACK);
         } else {
             currPiece = null;
             switchTurn();
@@ -111,5 +135,11 @@ public class GameController {
         return winningColor;
     }
 
+    public Square getLastDoubleStepSquare() {
+        return lastDoubleStepSquare;
+    }
 
+    public void setLastDoubleStepSquare(Square square) {
+        this.lastDoubleStepSquare = square;
+    }
 }

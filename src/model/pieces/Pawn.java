@@ -1,27 +1,18 @@
 package model.pieces;
 
+import controller.GameController;
 import model.Piece;
 import model.Square;
 import view.Board;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Pawn extends Piece {
-    private boolean wasMoved;
-    
-    public Pawn(int color, Square initSq, String img_file) {
-        super(color, initSq, img_file);
-    }
 
-    public boolean wasMoved() {
-        return wasMoved;
+    public Pawn(int color, Square initSq, String imgFile) {
+        super(color, initSq, imgFile);
     }
-
-    public void setWasMoved(boolean moved) {
-        this.wasMoved = moved;
-    }
-
 
     @Override
     public List<Square> getLegalMoves(Board b) {
@@ -30,12 +21,15 @@ public class Pawn extends Piece {
 
         int x = getPosition().getXNum();
         int y = getPosition().getYNum();
-        int dir = (getColor() == 0) ? 1 : -1; // Black = down, White = up
+        int dir = (getColor() == 0) ? 1 : -1;
 
+        Square enPassantTarget = null;
+        if (b.getGameController() != null) {
+            enPassantTarget = b.getGameController().getLastDoubleStepSquare();
+        }
 
         if (isInBounds(y + dir) && !board[y + dir][x].isOccupied()) {
             legalMoves.add(board[y + dir][x]);
-
 
             if (!wasMoved()) {
                 int doubleStepY = y + 2 * dir;
@@ -45,14 +39,23 @@ public class Pawn extends Piece {
             }
         }
 
-
         if (isInBounds(x + 1) && isInBounds(y + dir)) {
-            if (board[y + dir][x + 1].isOccupied()) {
+            Square rightDiag = board[y + dir][x + 1];
+            if (rightDiag.isOccupied() && rightDiag.getOccupyingPiece().getColor() != getColor()) {
+                legalMoves.add(rightDiag);
+            }
+            if (enPassantTarget != null && enPassantTarget.getXNum() == x + 1 && enPassantTarget.getYNum() == y) {
                 legalMoves.add(board[y + dir][x + 1]);
             }
         }
+
+
         if (isInBounds(x - 1) && isInBounds(y + dir)) {
-            if (board[y + dir][x - 1].isOccupied()) {
+            Square leftDiag = board[y + dir][x - 1];
+            if (leftDiag.isOccupied() && leftDiag.getOccupyingPiece().getColor() != getColor()) {
+                legalMoves.add(leftDiag);
+            }
+            if (enPassantTarget != null && enPassantTarget.getXNum() == x - 1 && enPassantTarget.getYNum() == y) {
                 legalMoves.add(board[y + dir][x - 1]);
             }
         }
@@ -60,8 +63,14 @@ public class Pawn extends Piece {
         return legalMoves;
     }
 
-    private boolean isInBounds(int i) {
-        return i >= 0 && i < 8;
+
+    public boolean isPromotionRank() {
+        int y = getPosition().getYNum();
+        return (getColor() == 0 && y == 7) || (getColor() == 1 && y == 0);
     }
 
+
+    private boolean isInBounds(int index) {
+        return index >= 0 && index < 8;
+    }
 }
