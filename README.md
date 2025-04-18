@@ -1,19 +1,46 @@
-# Chess for Java
+# Java Chess Game (Refactored)
 
-In the Spring of 2014, I created a two-player Chess game, with checkmate detection and a chess clock as a part of a Programming course at Penn. Our objective was to develop and test a bug-free standalone game in Java, complete with a GUI and game logic components.
+This is a refactored version of a classic Swing-based Java chess game. The codebase has been restructured into MVC architecture with clear separation of concerns, unit testing coverage, and extended features.
 
-I developed a bug-free, fast and well-designed product with a clean user interface and received the highest possible score in the assignment. The source code is in this repository.
+## Project Structure
 
-## Technology
+- **Model**: Contains core game logic (`Piece`, `Pawn`, `Square`, etc.)
+- **View**: Swing-based GUI components (`Board`, `GameWindow`, `StartMenu`, etc.)
+- **Controller**: Coordinates game state (`GameController`, `MoveService`, `CheckmateDetector`, etc.)
 
-This game is built using core Java, Java Swing GUI libraries and the jUnit test suite. It uses custom drawing for game components and self-programmed logic for checkmate detection. The code is modular, standalone and object oriented, which was a grading criteria for the assignment.
+## Key Features
 
-## Running
+- Full chess rules including:
+  - Piece-specific movement
+  - Pawn promotion
+  - Castling
+  - En passant
+  - Check, checkmate, and stalemate detection
+- Drag-and-drop GUI
+- Timer support
+- MVC refactoring with testability in mind
 
-Compile the project into an executable .jar file by running the following ANT build script on the command line. Make sure jar-in-jar-loader.zip in this repository is in the folder.
+## Unit Tests
 
-```
-ant -f build.xml
-```
+Includes comprehensive unit tests:
+- Piece movement validation (Pawn, Rook, Knight, Bishop, Queen, King)
+- Special rules: castling, en passant, pawn promotion
+- Game states: check, checkmate, stalemate
 
-Then, run the executable .jar file, named _chess-java.jar_ to play.
+## How to Run
+
+1. Open the project in IntelliJ or another Java IDE.
+2. Make sure your resources (e.g. piece images like `wp.png`, `bp.png`) are in the correct path.
+3. Run the `Game` class to launch the game.
+
+## How to Run Tests
+
+Tests are written using JUnit 5.
+
+- To run all tests: Right-click on the `test` directory and select **Run Tests**.
+- Or run specific test classes like `PawnTest`, `KingTest`, `KingCastlingTest`, etc.
+
+## Dependencies
+
+- Java 17 or above
+- JUnit 5 for testing
