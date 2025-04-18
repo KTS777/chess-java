@@ -32,7 +32,7 @@ public class Pawn extends Piece {
         int y = getPosition().getYNum();
         int dir = (getColor() == 0) ? 1 : -1; // Black = down, White = up
 
-        // Single move forward
+
         if (isInBounds(y + dir) && !board[y + dir][x].isOccupied()) {
             legalMoves.add(board[y + dir][x]);
 
@@ -45,7 +45,7 @@ public class Pawn extends Piece {
             }
         }
 
-        // Diagonal captures
+
         if (isInBounds(x + 1) && isInBounds(y + dir)) {
             if (board[y + dir][x + 1].isOccupied()) {
                 legalMoves.add(board[y + dir][x + 1]);

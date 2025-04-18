@@ -31,8 +31,12 @@ public class Knight extends Piece {
             int newY = y + move[1];
 
             if (isInBounds(newX, newY)) {
-                legalMoves.add(squares[newY][newX]);
+                Square target = squares[newY][newX];
+                if (!target.isOccupied() || target.getOccupyingPiece().getColor() != getColor()) {
+                    legalMoves.add(target);
+                }
             }
+
         }
 
         return legalMoves;

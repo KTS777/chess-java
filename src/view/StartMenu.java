@@ -170,7 +170,7 @@ public class StartMenu implements Runnable {
             Image img = ImageIO.read(getClass().getResource(imagePath));
             label.setIcon(new ImageIcon(img));
         } catch (Exception e) {
-            System.err.println("⚠️ Required game file " + imagePath + " missing (" + e.getMessage() + ")");
+            System.err.println("Required game file " + imagePath + " missing (" + e.getMessage() + ")");
         }
         return label;
     }

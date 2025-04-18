@@ -45,9 +45,9 @@ public class Queen extends Piece {
                     legalMoves.add(target);
                 } else {
                     if (target.getOccupyingPiece().getColor() != getColor()) {
-                        legalMoves.add(target); // capture
+                        legalMoves.add(target);
                     }
-                    break; // blocked
+                    break;
                 }
 
                 currX += dx;

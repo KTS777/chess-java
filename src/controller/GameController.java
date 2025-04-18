@@ -4,7 +4,6 @@ import model.Piece;
 import model.Square;
 import view.Board;
 
-import java.util.List;
 
 public class GameController {
     public static final int BLACK = 0;

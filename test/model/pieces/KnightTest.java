@@ -1,7 +1,7 @@
+package model.pieces;
+
 import model.Piece;
 import model.Square;
-import model.pieces.Knight;
-import model.pieces.Rook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Board;

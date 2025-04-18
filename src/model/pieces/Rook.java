@@ -27,12 +27,10 @@ public class Rook extends Piece {
         int left = linearLimits[2];
         int right = linearLimits[3];
 
-        // Vertical moves
         for (int i = top; i <= bottom; i++) {
             if (i != y) legalMoves.add(squares[i][x]);
         }
 
-        // Horizontal moves
         for (int i = left; i <= right; i++) {
             if (i != x) legalMoves.add(squares[y][i]);
         }

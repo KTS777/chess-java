@@ -16,7 +16,7 @@ public class MoveService {
 
         if (target != null) {
             if (target.getColor() == piece.getColor()) {
-                return false; // Can't capture own piece
+                return false;
             } else {
                 capturePiece(destination, piece, board);
             }
@@ -25,7 +25,7 @@ public class MoveService {
         Square origin = piece.getPosition();
         origin.removePiece();
 
-        destination.setOccupyingPiece(piece); // replaces put()
+        destination.setOccupyingPiece(piece);
         piece.setPosition(destination);
 
         if (piece instanceof Pawn pawn) {

@@ -60,7 +60,7 @@ public class Board extends JPanel {
         squares = new Square[8][8];
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                int color = (x + y) % 2; // 0 or 1 for alternating colors
+                int color = (x + y) % 2;
                 squares[y][x] = new Square(color,  x, y);
             }
         }

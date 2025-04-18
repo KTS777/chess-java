@@ -1,12 +1,11 @@
+package model.pieces;
+
 import model.Piece;
 import model.Square;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Board;
-import model.pieces.Pawn;
-import model.pieces.Rook;
 
-import javax.swing.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,8 +16,8 @@ public class PawnTest {
 
     @BeforeEach
     public void setUp() {
-        board = new Board(null); // no GameWindow needed for logic tests
-        board.setupEmptyBoard(); // helper you should implement to initialize 8x8 empty board
+        board = new Board(null);
+        board.setupEmptyBoard();
     }
 
     @Test
@@ -26,8 +25,8 @@ public class PawnTest {
         Square startSquare = board.getSquare(3, 1); // d7
         Pawn pawn = new Pawn(0, startSquare, "bp.png");
 
-        pawn.setPosition(startSquare);                 // ← Make sure position is set
-        board.getSquare(3, 1).setOccupyingPiece(pawn); // ← Place pawn on board
+        pawn.setPosition(startSquare);
+        board.getSquare(3, 1).setOccupyingPiece(pawn);
 
         List<Square> legalMoves = pawn.getLegalMoves(board);
         System.out.println("Legal moves for black pawn at (3,1):");
@@ -42,7 +41,7 @@ public class PawnTest {
     @Test
     public void testBlackPawnInitialDoubleMove() {
         Pawn pawn = new Pawn(0, board.getSquare(3, 1), "bp.png");
-        pawn.setPosition(board.getSquare(3, 1)); // ADD THIS LINE
+        pawn.setPosition(board.getSquare(3, 1));
         board.getSquare(3, 1).setOccupyingPiece(pawn);
 
         List<Square> legalMoves = pawn.getLegalMoves(board);
@@ -84,7 +83,7 @@ public class PawnTest {
         board.getSquare(4, 4).setOccupyingPiece(pawn);
 
         Piece enemy = new Rook(0, board.getSquare(4, 3), "br.png");
-        board.getSquare(4, 3).setOccupyingPiece(enemy); // directly in front
+        board.getSquare(4, 3).setOccupyingPiece(enemy);
 
         List<Square> legalMoves = pawn.getLegalMoves(board);
         assertFalse(legalMoves.contains(board.getSquare(4, 3)));

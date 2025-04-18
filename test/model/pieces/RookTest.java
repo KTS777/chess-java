@@ -1,4 +1,5 @@
-import model.pieces.Rook;
+package model.pieces;
+
 import model.Piece;
 import model.Square;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,6 @@ public class RookTest {
 
         List<Square> legalMoves = rook.getLegalMoves(board);
 
-        // Check it can move in all 4 directions
         assertTrue(legalMoves.contains(board.getSquare(4, 3))); // Up
         assertTrue(legalMoves.contains(board.getSquare(4, 5))); // Down
         assertTrue(legalMoves.contains(board.getSquare(3, 4))); // Left

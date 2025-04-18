@@ -1,7 +1,7 @@
+package model.pieces;
+
 import model.Piece;
 import model.Square;
-import model.pieces.Queen;
-import model.pieces.Rook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Board;
@@ -17,7 +17,7 @@ public class QueenTest {
     @BeforeEach
     public void setUp() {
         board = new Board(null);
-        board.setupEmptyBoard(); // Make sure this sets an 8x8 board of empty squares
+        board.setupEmptyBoard();
     }
 
     @Test
@@ -93,20 +93,18 @@ public class QueenTest {
 
         List<Square> moves = queen.getLegalMoves(board);
 
-        // Queen should only be allowed to move along the same file (vertical), nothing diagonal/horizontal
-        assertTrue(moves.contains(board.getSquare(4, 5))); // forward
-        assertTrue(moves.contains(board.getSquare(4, 4))); // forward
-        assertFalse(moves.contains(board.getSquare(3, 6))); // diagonal not allowed
-        assertFalse(moves.contains(board.getSquare(5, 6))); // diagonal not allowed
+
+        assertTrue(moves.contains(board.getSquare(4, 5)));
+        assertTrue(moves.contains(board.getSquare(4, 4)));
+        assertFalse(moves.contains(board.getSquare(3, 6)));
+        assertFalse(moves.contains(board.getSquare(5, 6)));
     }
 
     @Test
     public void testQueenHasNoLegalMoves() {
-        // Queen surrounded on all sides
         Queen queen = new Queen(1, board.getSquare(4, 4), "wq.png");
         board.getSquare(4, 4).setOccupyingPiece(queen);
 
-        // All 8 surrounding squares blocked by own pieces
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;

@@ -83,7 +83,7 @@ public class CheckmateDetector {
 
         if (isWhiteTurn) {
             if (isInCheck(whiteKing, blackThreatMap)) {
-                isCheckmate(whiteKing, blackThreatMap, whiteThreatMap); // updates movableSquares
+                isCheckmate(whiteKing, blackThreatMap, whiteThreatMap);
             }
         } else {
             if (isInCheck(blackKing, whiteThreatMap)) {
@@ -108,7 +108,7 @@ public class CheckmateDetector {
             isSafeMove = false;
         }
 
-        // revert move
+
         moveService.applyMove(piece, originalSquare, board);
         if (capturedPiece != null) {
             targetSquare.setOccupyingPiece(capturedPiece);
@@ -186,7 +186,7 @@ public class CheckmateDetector {
         Square threatSquare = threats.get(0).getPosition();
         boolean capture = false;
 
-        // If king can capture directly
+
         if (king.getLegalMoves(board).contains(threatSquare) && testMove(king, threatSquare)) {
             movableSquares.add(threatSquare);
             capture = true;
@@ -201,6 +201,16 @@ public class CheckmateDetector {
 
         return capture;
     }
+
+    public boolean whiteStalemated() {
+
+        return !whiteInCheck() && whiteKing.getLegalMoves(board).isEmpty();
+    }
+
+    public boolean blackStalemated() {
+        return !blackInCheck() && blackKing.getLegalMoves(board).isEmpty();
+    }
+
 
     private boolean canBlock(List<Piece> threats, Map<Square, List<Piece>> allies, King king) {
         if (threats.size() != 1) return false;

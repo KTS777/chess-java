@@ -37,7 +37,7 @@ public abstract class Piece {
         try {
             return ImageIO.read(getClass().getResource(path));
         } catch (IOException | IllegalArgumentException e) {
-            System.err.println("⚠️ Failed to load image: " + path + " (" + e.getMessage() + ")");
+            System.err.println("Failed to load image: " + path + " (" + e.getMessage() + ")");
             return null;
         }
     }
@@ -149,7 +149,5 @@ public abstract class Piece {
         return result;
     }
 
-
-    // No implementation, to be implemented by each subclass
     public abstract List<Square> getLegalMoves(Board b);
 }

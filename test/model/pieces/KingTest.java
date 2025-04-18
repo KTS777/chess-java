@@ -1,10 +1,9 @@
-import model.Piece;
+package model.pieces;
+
 import model.Square;
-import model.pieces.Pawn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Board;
-import model.pieces.King;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class KingTest {
 
         List<Square> legalMoves = king.getLegalMoves(board);
 
-        // Should have no legal moves
+
         assertEquals(0, legalMoves.size(), "King should not be able to move to any square occupied by friendly pieces");
     }
 
@@ -84,7 +83,7 @@ public class KingTest {
         King king = new King(1, board.getSquare(4, 4), "wk.png"); // e4
         board.getSquare(4, 4).setOccupyingPiece(king);
 
-        // Place enemy pawns around the king
+
         int[][] deltas = {
                 {-1, -1}, {-1, 0}, {-1, 1},
                 {0, -1},          {0, 1},
@@ -100,7 +99,7 @@ public class KingTest {
 
         List<Square> legalMoves = king.getLegalMoves(board);
 
-        // Should have 8 legal capture moves
+
         assertEquals(8, legalMoves.size(), "King should be able to capture all 8 enemy pieces");
 
         for (int[] d : deltas) {
